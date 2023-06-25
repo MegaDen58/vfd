@@ -79,6 +79,7 @@ public class DetailProductsController implements Initializable {
     @FXML
     private Label stepPriceLotsLabel;
     public static Lot lot;
+    int id = 0;
     private ProductsBuyerController productsBuyerController;
     Connection connection = DatabaseConnector.ConnectDb();
     BidDAO bidDAO = new BidDAO(connection);
@@ -105,7 +106,7 @@ public class DetailProductsController implements Initializable {
     void BuyerBet(ActionEvent event) throws Exception{
         LotDAO lotDAO = new LotDAO(DatabaseConnector.ConnectDb());
         double bet = Double.parseDouble(buyerBettingField.getText());
-        int id = 0;
+        id = 0;
         if(AuthorizationController.userId == 0){
             id = RegistrationController.registeredUserId;
         }
@@ -117,7 +118,7 @@ public class DetailProductsController implements Initializable {
             lotDAO.updateCurrentPriceById(bet, lot.getId());
             lotDAO.updateBuyerIdByLotId(id, lot.getId());
             if(bidDAO.existBidByIdLot(lot.getId(), id)){
-                bidDAO.setBidAmountByIdLot(lot.getId(), bet);
+                bidDAO.setBidAmountByIdLot(lot.getId(), bet, id);
                 Stage stageClose = (Stage) buyerBettingButton.getScene().getWindow();
                 stageClose.close();
 

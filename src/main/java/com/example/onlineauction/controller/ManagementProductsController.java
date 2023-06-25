@@ -141,18 +141,18 @@ public class ManagementProductsController {
                 sellerId = userDAO1.getIdByLogin(login);
             }
 
-            int buyerId = 0;
+            int buyerId = 49;
 
             // Создание объекта лота
-            Lot lot = new Lot(name, description, startPrice, startPrice, stepPrice, publicationDate.toString(), finishDate.toString(), condition);
-            lot.setSellerId(sellerId);
-            lot.setCurrentBuyerId(buyerId); // Установка фиктивного покупателя
-            lot.setCategoryId(categoryId);
+            Lot lotAdd = new Lot(name, description, startPrice, startPrice, stepPrice, publicationDate.toString(), finishDate.toString(), condition);
+            lotAdd.setSellerId(sellerId);
+            lotAdd.setCurrentBuyerId(buyerId); // Установка фиктивного покупателя
+            lotAdd.setCategoryId(categoryId);
 
             // Сохраняем лот в базе данных
             try {
                 lotDAO = new LotDAO(DatabaseConnector.ConnectDb());
-                lotDAO.create(lot);
+                lotDAO.create(lotAdd);
                 showAlert(Alert.AlertType.INFORMATION, "Успешно!", "Лот успешно добавлен!");
                 Stage stageClose = (Stage) saveButtonManageLots.getScene().getWindow();
                 stageClose.close();

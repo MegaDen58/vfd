@@ -29,7 +29,7 @@ public class Lot {
     private double myBet;
     private String seller;
     private String buyer;
-    private String winner = "Unknown";
+    private String winner;
     public Lot(int id, String name, String category, double startPrice, double currentPrice, String statusString) {
         this.id = id;
         this.name = name;
@@ -121,7 +121,12 @@ public class Lot {
         this.seller = seller;
     }
     public String getWinner(){
-        return winner;
+        if(currentBuyerId == 49){
+            return "Отсутствует";
+        }
+        else{
+            return winner;
+        }
     }
     public void setWinner(String winner){
         this.winner = winner;

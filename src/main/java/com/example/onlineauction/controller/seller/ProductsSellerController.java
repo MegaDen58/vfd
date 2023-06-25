@@ -86,6 +86,7 @@ public class ProductsSellerController {
     public static boolean isAdmin = false;
     public static List<Lot> closeLots;
     private int id;
+    public static int userId;
 
     public ProductsSellerController() throws Exception {
     }

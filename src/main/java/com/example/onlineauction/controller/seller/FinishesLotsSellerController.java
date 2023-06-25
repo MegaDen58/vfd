@@ -4,7 +4,10 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import com.example.onlineauction.DatabaseConnector;
+import com.example.onlineauction.controller.authentication.AuthorizationController;
+import com.example.onlineauction.controller.authentication.RegistrationController;
 import com.example.onlineauction.dao.LotDAO;
+import com.example.onlineauction.dao.UserDAO;
 import com.example.onlineauction.model.Lot;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -46,7 +49,22 @@ public class FinishesLotsSellerController {
     @FXML
     void initialize() throws Exception{
         LotDAO lotDAO = new LotDAO(DatabaseConnector.ConnectDb());
-        ProductsSellerController.closeLots = lotDAO.getInactiveLots();
+        //ProductsSellerController.closeLots = lotDAO.getInactiveLots();
+        int id = 0;
+        if(AuthorizationController.userId != 0){
+            id = AuthorizationController.userId;
+        }
+        else{
+            id = RegistrationController.registeredUserId;
+        }
+        ObservableList<Lot> lots = FXCollections.observableArrayList(lotDAO.getInactiveLotsBySellerId(id));
+        UserDAO userDAO = new UserDAO(DatabaseConnector.ConnectDb());
+        for(Lot lot : lots){
+            if(lot.getCurrentBuyerId() != 49){
+                lot.setWinner(userDAO.getNameAndSurnameById(lot.getCurrentBuyerId()));
+            }
+        }
+
 //        assert AnchorPaneWinningSeller != null : "fx:id=\"AnchorPaneWinningSeller\" was not injected: check your FXML file 'finish-products-seller.fxml'.";
 //        assert TableViewFinishesLots != null : "fx:id=\"TableViewFinishesLots\" was not injected: check your FXML file 'finish-products-seller.fxml'.";
 //        assert col_PriceLotsFinish != null : "fx:id=\"col_PriceLotsFinish\" was not injected: check your FXML file 'finish-products-seller.fxml'.";
@@ -57,10 +75,10 @@ public class FinishesLotsSellerController {
         col_nameLotsFinish.setCellValueFactory(new PropertyValueFactory<>("name"));
         col_categoryLotsFinish.setCellValueFactory(new PropertyValueFactory<>("category"));
         col_PriceLotsFinish.setCellValueFactory(new PropertyValueFactory<>("currentPrice"));
-        col_nameBuyerLotsFinish.setCellValueFactory(new PropertyValueFactory<>("seller"));
+        col_nameBuyerLotsFinish.setCellValueFactory(new PropertyValueFactory<>("winner"));
         col_finalStatusLotsFinish.setCellValueFactory(new PropertyValueFactory<>("statusString"));
 
-        ObservableList<Lot> lots = FXCollections.observableArrayList(ProductsSellerController.closeLots);
+        //ObservableList<Lot> lots = FXCollections.observableArrayList(ProductsSellerController.closeLots);
         TableViewFinishesLots.setItems(lots);
     }
 
